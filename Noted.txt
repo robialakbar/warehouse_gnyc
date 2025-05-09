@@ -1,0 +1,2 @@
+1. Aplikasi Sudah Bisa Barcode Scanner HP
+2. Admin sudah Bisa Pilih Role Fitur user yang aktif
