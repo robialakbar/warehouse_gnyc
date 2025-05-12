@@ -81,7 +81,8 @@ class ProductController extends Controller
             foreach($tmp as $p){
                 $totalStockIn   = DB::table('stock')->where([["product_id", $p->product_id], ["type", 1]])->sum("product_amount");
                 $totalStockOut  = DB::table('stock')->where([["product_id", $p->product_id], ["type", 0]])->sum("product_amount");
-                $availableStock = $totalStockIn-$totalStockOut;
+                $totalRetur     = DB::table('stock')->where([["product_id", $p->product_id], ["type", 2]])->sum("product_amount");
+                $availableStock = $totalStockIn-$totalStockOut+$totalRetur;
                 $p->product_amount = $availableStock;
             }
 
@@ -95,8 +96,6 @@ class ProductController extends Controller
                     "JUMLAH"                => $t->product_amount,
                     "VARIAN"                => $t->variant,
                     "WARNA"                 => $t->color,
-                    "HARGA PEMBELIAN (RP)"  => $t->purchase_price,
-                    "HARGA SATUAN (RP)"     => $t->sale_price,
                 ];
             }
 
@@ -109,7 +108,8 @@ class ProductController extends Controller
             foreach($products as $p){
                 $totalStockIn   = DB::table('stock')->where([["product_id", $p->product_id], ["type", 1]])->sum("product_amount");
                 $totalStockOut  = DB::table('stock')->where([["product_id", $p->product_id], ["type", 0]])->sum("product_amount");
-                $availableStock = $totalStockIn-$totalStockOut;
+                $totalRetur     = DB::table('stock')->where([["product_id", $p->product_id], ["type", 2]])->sum("product_amount");
+                $availableStock = $totalStockIn-$totalStockOut+$totalRetur;
                 $p->product_amount = $availableStock;
             }
         }
@@ -220,8 +220,6 @@ class ProductController extends Controller
             'product_name'      => 'required',
             'variant'           => 'required',
             'color'             => 'required',
-            'purchase_price'    => 'required|numeric',
-            'sale_price'        => 'required|numeric',
             'category'          => 'required|exists:categories,category_id',
             
         ],
@@ -231,10 +229,6 @@ class ProductController extends Controller
             'product_name.required'     => 'Product Name belum diisi!',
             'variant.required'          => 'Varian belum diisi!',
             'color.required'            => 'Warna belum diisi!',
-            'purchase_price.required'   => 'Purchase Price belum diisi!',
-            'purchase_price.numeric'    => 'Purchase Price harus berupa angka!',
-            'sale_price.required'       => 'Sale Price belum diisi!',
-            'sale_price.numeric'        => 'Sale Price harus berupa angka!',
             'category.required'         => 'Kategori belum dipilih!',
             'category.exists'           => 'Kategori tidak tersedia!',
         ]);
@@ -246,8 +240,6 @@ class ProductController extends Controller
             "product_name"      => $req->product_name,
             "variant"           => $req->variant,
             "color"             => $req->color,
-            "purchase_price"    => $req->purchase_price,
-            "sale_price"        => $req->sale_price,
             "category_id"       => $req->category,
         ];
 
@@ -318,8 +310,6 @@ class ProductController extends Controller
                     'product_name'      => $d['NAMA PRODUK'],
                     'variant'           => $d['VARIAN'],
                     'color'             => $d['WARNA'],
-                    'purchase_price'    => $d['HARGA PEMBELIAN (RP)'],
-                    'sale_price'        => $d['HARGA SATUAN (RP)'],
                 ];
 
                 $add = DB::table('products')->insertOrIgnore($param);
@@ -410,11 +400,13 @@ class ProductController extends Controller
 
             $totalStockIn   = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 1]])->sum("product_amount");
             $totalStockOut  = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 0]])->sum("product_amount");
-            $availableStock = $totalStockIn-$totalStockOut;
+            $totalRetur     = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 2]])->sum("product_amount");
+            $availableStock = $totalStockIn-$totalStockOut+$totalRetur;
 
-            $endingTotalStockIn   = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 1]])->sum("product_amount");
-            $endingTotalStockOut  = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 0]])->sum("product_amount");
-            $endingAmount = $endingTotalStockIn-$endingTotalStockOut;
+            $endingTotalStockIn     = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 1]])->sum("product_amount");
+            $endingTotalStockOut    = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 0]])->sum("product_amount");
+            $endingTotalRetur       = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 2]])->sum("product_amount");
+            $endingAmount           = $endingTotalStockIn-$endingTotalStockOut+$endingTotalRetur;
 
             if($type == 0){
                 if($amount > $availableStock){
@@ -455,7 +447,7 @@ class ProductController extends Controller
         $history = DB::table('stock')
                     ->leftJoin("products", "stock.product_id", "=", "products.product_id")
                     ->leftJoin("users", "stock.user_id", "=", "users.id")
-                    ->select("stock.*", "products.product_code", "products.product_name", "products.sale_price", "users.name");
+                    ->select("stock.*", "products.product_code", "products.product_name", "users.name");
 
         if(!empty($search)){
             $history = $history->orWhere([["products.product_code", "LIKE", "%".$search."%"], ["products.warehouse_id", $warehouse_id]])
@@ -493,7 +485,6 @@ class ProductController extends Controller
                     "STOCK OUT"         => $out,
                     "RETUR"             => $retur,
                     "SISA"              => $t->ending_amount,
-                    "SATUAN (RP)"       => number_format($t->sale_price, 2, ",","."),
                 ];
             }
 

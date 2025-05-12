@@ -49,7 +49,6 @@
                                 <th>{{ __('Stock Out') }}</th>
                                 <th>{{ __('Retur') }}</th>
                                 <th>{{ __('Sisa') }}</th>
-                                <th>{{ __('Satuan') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,12 +79,11 @@
                                     <td class="text-center">{{ $out }}</td>
                                     <td class="text-center">{{ $retur }}</td>
                                     <td class="text-center">{{ $d->ending_amount }}</td>
-                                    <td class="text-center">{{ $d->sale_price }}</td>
                                 </tr>
                             @endforeach
                         @else
                             <tr class="text-center">
-                                <td colspan="9">{{ __('No data.') }}</td>
+                                <td colspan="8">{{ __('No data.') }}</td>
                             </tr>
                         @endif
                         </tbody>

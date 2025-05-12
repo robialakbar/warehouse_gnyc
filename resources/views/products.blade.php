@@ -148,18 +148,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="purchase_price" class="col-sm-4 col-form-label">{{ __('Purchase Price') }} (Rp)</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="purchase_price" name="purchase_price">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="sale_price" class="col-sm-4 col-form-label">{{ __('Sale Price') }} (Rp)</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="sale_price" name="sale_price">
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="category" class="col-sm-4 col-form-label">Category</label>
                             <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;" id="category" name="category">

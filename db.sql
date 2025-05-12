@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 09 Bulan Mei 2025 pada 06.51
+-- Waktu pembuatan: 12 Bulan Mei 2025 pada 04.19
 -- Versi server: 8.0.42-0ubuntu0.24.04.1
 -- Versi PHP: 8.2.28
 
@@ -102,8 +102,6 @@ CREATE TABLE `products` (
   `user_id` bigint NOT NULL,
   `product_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `purchase_price` decimal(11,2) NOT NULL,
-  `sale_price` decimal(11,2) NOT NULL,
   `category_id` bigint DEFAULT NULL,
   `variant` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
@@ -113,14 +111,14 @@ CREATE TABLE `products` (
 -- Dumping data untuk tabel `products`
 --
 
-INSERT INTO `products` (`product_id`, `warehouse_id`, `user_id`, `product_code`, `product_name`, `purchase_price`, `sale_price`, `category_id`, `variant`, `color`) VALUES
-(31, 1, 1, '8809486680001', 'RIBBON SOAP PUMP //Botol Sabun Bentuk Pita/Botol Sabun Cream Pink Unik/Botol Sabun Cantik/Cute Dispenser Soap/Botol Sabun Pump/Botol Sabun Pencet/Pump Soap Dispenser/Tempat Sabun keramik', '20000.00', '20000.00', 14, 'Dispenser', 'Yellow'),
-(32, 1, 1, 'DYNC99880002', 'RIBBON SOAP PUMP //Botol Sabun Bentuk Pita/Botol Sabun Cream Pink Unik/Botol Sabun Cantik/Cute Dispenser Soap/Botol Sabun Pump/Botol Sabun Pencet/Pump Soap Dispenser/Tempat Sabun keramik', '20000.00', '20000.00', 14, 'Dispenser', 'Pink'),
-(33, 1, 1, 'DYNC99880003', 'RIBBON SOAP PUMP //Botol Sabun Bentuk Pita/Botol Sabun Cream Pink Unik/Botol Sabun Cantik/Cute Dispenser Soap/Botol Sabun Pump/Botol Sabun Pencet/Pump Soap Dispenser/Tempat Sabun keramik', '20000.00', '20000.00', 14, 'Dispenser', 'White'),
-(34, 1, 1, 'DYNC99880004', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', '20000.00', '20000.00', 14, 'Vas', 'Type A'),
-(35, 1, 1, 'DYNC99880005', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', '20000.00', '20000.00', 14, 'Vas', 'Type B'),
-(36, 1, 1, 'DYNC99880006', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', '20000.00', '20000.00', 14, 'Vas', 'Type C'),
-(37, 1, 1, 'DYNC99880007', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', '20000.00', '20000.00', 14, 'Vas', 'Type D');
+INSERT INTO `products` (`product_id`, `warehouse_id`, `user_id`, `product_code`, `product_name`, `category_id`, `variant`, `color`) VALUES
+(31, 1, 1, '8809486680001', 'RIBBON SOAP PUMP //Botol Sabun Bentuk Pita/Botol Sabun Cream Pink Unik/Botol Sabun Cantik/Cute Dispenser Soap/Botol Sabun Pump/Botol Sabun Pencet/Pump Soap Dispenser/Tempat Sabun keramik', 14, 'Dispenser', 'Yellow'),
+(32, 1, 1, 'DYNC99880002', 'RIBBON SOAP PUMP //Botol Sabun Bentuk Pita/Botol Sabun Cream Pink Unik/Botol Sabun Cantik/Cute Dispenser Soap/Botol Sabun Pump/Botol Sabun Pencet/Pump Soap Dispenser/Tempat Sabun keramik', 14, 'Dispenser', 'Pink'),
+(33, 1, 1, 'DYNC99880003', 'RIBBON SOAP PUMP //Botol Sabun Bentuk Pita/Botol Sabun Cream Pink Unik/Botol Sabun Cantik/Cute Dispenser Soap/Botol Sabun Pump/Botol Sabun Pencet/Pump Soap Dispenser/Tempat Sabun keramik', 14, 'Dispenser', 'White'),
+(34, 1, 1, 'DYNC99880004', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', 14, 'Vas', 'Type A'),
+(35, 1, 1, 'DYNC99880005', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', 14, 'Vas', 'Type B'),
+(36, 1, 1, 'DYNC99880006', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', 14, 'Vas', 'Type C'),
+(37, 1, 1, 'DYNC99880007', 'Vas bunga Keramik Arkasela / Vas bunga etnik new', 14, 'Vas', 'Type D');
 
 -- --------------------------------------------------------
 
@@ -240,7 +238,9 @@ INSERT INTO `stock` (`stock_id`, `warehouse_id`, `user_id`, `shelf_id`, `product
 (32, 1, 1, 0, 31, NULL, NULL, 1, 0, '2025-05-09 13:44:08', 43),
 (33, 1, 1, 0, 31, NULL, NULL, 1, 1, '2025-05-09 13:47:04', 44),
 (34, 1, 1, 0, 31, NULL, NULL, 1, 2, '2025-05-09 13:48:09', 45),
-(35, 1, 1, 0, 31, NULL, NULL, 1, 0, '2025-05-09 13:48:17', 43);
+(35, 1, 1, 0, 31, NULL, NULL, 1, 0, '2025-05-09 13:48:17', 43),
+(36, 1, 1, 0, 31, NULL, NULL, 1, 2, '2025-05-12 11:12:33', 44),
+(37, 1, 1, 0, 31, NULL, NULL, 1, 2, '2025-05-12 11:19:04', 47);
 
 -- --------------------------------------------------------
 
@@ -416,7 +416,7 @@ ALTER TABLE `shelf`
 -- AUTO_INCREMENT untuk tabel `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stock_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `stock_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
