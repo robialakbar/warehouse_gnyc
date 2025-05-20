@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
 @endsection
 @section('content')
     <div class="content-header">
@@ -16,6 +17,8 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+                <strong>Tanggal:</strong>
+                <input type="text" name="daterange" value=""/>
                 <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export XLS</button>
                 <button type="button" class="btn btn-primary" onclick="download('pdf')"><i class="fas fa-file-pdf"></i> Export PDF</button>
                 <div class="card-tools">
@@ -100,6 +103,9 @@
 @section('custom-js')
     <script src="/plugins/toastr/toastr.min.js"></script>
     <script src="/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{ url('/plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ url('/plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ url('/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script>
         $(function () {
             $('.select2').select2({
@@ -112,7 +118,15 @@
         });
 
         function download(type){
-            window.location.href="{{ route('products.stock.history') }}?search={{ Request::get('search') }}&dl="+type;
+            startDate = $('input[name="daterange"]').data('daterangepicker').startDate.format('YYYY-MM-DD');
+            endDate = $('input[name="daterange"]').data('daterangepicker').endDate.format('YYYY-MM-DD');
+
+            window.location.href="{{ route('products.stock.history') }}?search={{ Request::get('search') }}&startDate="+startDate+"&endDate="+endDate+"&dl="+type;
         }
+
+        $('input[name="daterange"]').daterangepicker({
+            startDate: moment().startOf('month'),
+            endDate: moment()
+        });
     </script>
 @endsection

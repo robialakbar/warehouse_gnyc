@@ -459,7 +459,14 @@ class ProductController extends Controller
         }
 
         if(!empty($dl)){
-            $tmp            = $history->orderBy("stock.stock_id", "asc")->get();
+            $startDate      = $req->startDate;
+            $endDate        = $req->endDate;
+
+            if(!empty($startDate) && !empty($endDate)){
+                $tmp            = $history->where([["datetime" ,">=",$startDate." 00:00:00"], ["datetime" ,"<=", $endDate." 23:59:59"]])->orderBy("stock.stock_id", "asc")->get();
+            } else {
+                $tmp            = $history->orderBy("stock.stock_id", "asc")->get();
+            }
             $fn             = 'history_'.time();
             $historyExport  = [];
 
