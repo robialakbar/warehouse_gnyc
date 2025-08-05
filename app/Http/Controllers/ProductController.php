@@ -82,7 +82,8 @@ class ProductController extends Controller
                 $totalStockIn   = DB::table('stock')->where([["product_id", $p->product_id], ["type", 1]])->sum("product_amount");
                 $totalStockOut  = DB::table('stock')->where([["product_id", $p->product_id], ["type", 0]])->sum("product_amount");
                 $totalRetur     = DB::table('stock')->where([["product_id", $p->product_id], ["type", 2]])->sum("product_amount");
-                $availableStock = $totalStockIn-$totalStockOut+$totalRetur;
+                $totalReject    = DB::table('stock')->where([["product_id", $p->product_id], ["type", 3]])->sum("product_amount");
+                $availableStock = (($totalStockIn-$totalStockOut)+$totalRetur)-$totalReject;
                 $p->product_amount = $availableStock;
             }
 
@@ -109,7 +110,8 @@ class ProductController extends Controller
                 $totalStockIn   = DB::table('stock')->where([["product_id", $p->product_id], ["type", 1]])->sum("product_amount");
                 $totalStockOut  = DB::table('stock')->where([["product_id", $p->product_id], ["type", 0]])->sum("product_amount");
                 $totalRetur     = DB::table('stock')->where([["product_id", $p->product_id], ["type", 2]])->sum("product_amount");
-                $availableStock = $totalStockIn-$totalStockOut+$totalRetur;
+                $totalReject    = DB::table('stock')->where([["product_id", $p->product_id], ["type", 3]])->sum("product_amount");
+                $availableStock = (($totalStockIn-$totalStockOut)+$totalRetur)-$totalReject;
                 $p->product_amount = $availableStock;
             }
         }
@@ -401,14 +403,16 @@ class ProductController extends Controller
             $totalStockIn   = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 1]])->sum("product_amount");
             $totalStockOut  = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 0]])->sum("product_amount");
             $totalRetur     = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 2]])->sum("product_amount");
-            $availableStock = $totalStockIn-$totalStockOut+$totalRetur;
+            $totalReject    = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 3]])->sum("product_amount");
+            $availableStock = (($totalStockIn-$totalStockOut)+$totalRetur)-$totalReject;
 
             $endingTotalStockIn     = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 1]])->sum("product_amount");
             $endingTotalStockOut    = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 0]])->sum("product_amount");
             $endingTotalRetur       = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 2]])->sum("product_amount");
-            $endingAmount           = $endingTotalStockIn-$endingTotalStockOut+$endingTotalRetur;
+            $endingTotalReject      = DB::table('stock')->where([["warehouse_id", $warehouse_id], ["product_id", $product_id], ["type", 3]])->sum("product_amount");
+            $endingAmount           = (($endingTotalStockIn-$endingTotalStockOut)+$endingTotalRetur)-$totalReject;
 
-            if($type == 0){
+            if($type == 0 || $type == 3){
                 if($amount > $availableStock){
                     $result = ["status" => 0, "message" => "Jumlah stock out melebihi jumlah stock yang tersedia!"];
                     goto resp;
@@ -447,13 +451,12 @@ class ProductController extends Controller
         $history = DB::table('stock')
                     ->leftJoin("products", "stock.product_id", "=", "products.product_id")
                     ->leftJoin("users", "stock.user_id", "=", "users.id")
-                    ->select("stock.*", "products.product_code", "products.product_name", "users.name");
+                    ->select("stock.*", "products.product_code", "products.product_name", "users.name", "products.variant", "products.color");
 
         if(!empty($search)){
             $history = $history->orWhere([["products.product_code", "LIKE", "%".$search."%"], ["products.warehouse_id", $warehouse_id]])
                         ->orWhere([["stock.stock_name", "LIKE", "%".$search."%"], ["products.warehouse_id", $warehouse_id]])
-                        ->orWhere([["products.product_name", "LIKE", "%".$search."%"], ["products.warehouse_id", $warehouse_id]])
-                        ->orWhere([["products.warehouse_id", $warehouse_id]]);
+                        ->orWhere([["products.product_name", "LIKE", "%".$search."%"], ["products.warehouse_id", $warehouse_id]]);
         } else {
             $history = $history->where("products.warehouse_id", $warehouse_id);
         }

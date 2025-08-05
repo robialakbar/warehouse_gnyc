@@ -48,4 +48,5 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         $sheet->getStyle('A1:F1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     }
+    
 }

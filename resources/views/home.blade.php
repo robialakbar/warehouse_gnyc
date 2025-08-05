@@ -56,6 +56,22 @@
                     </div>
                 </a>
             </div>
+            
+            <div class="col-lg-3 col-6">
+                <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(3)">
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <p>Stock</p>
+                            <h3>Reject</h3>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-3 col-6">
                 <a href="{{ route('products.stock.history') }}">
                     <div class="small-box bg-primary">
@@ -207,9 +223,12 @@ html5QrcodeScanner.render(onScanSuccess, onScanFailure);
             } else if(type == 1){
                 $('#modal-title').text("Stock In");
                 $('#button-update').text("Stock In");
-            } else {
+            } else if(type == 2){
                 $('#modal-title').text("Retur");
                 $('#button-update').text("Retur");
+            } else {
+                $('#modal-title').text("Reject");
+                $('#button-update').text("Reject");
             }
         }
 

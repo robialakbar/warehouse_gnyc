@@ -48,9 +48,12 @@
                                 <th>{{ __('User') }}</th>
                                 <th>{{ __('Product Code') }}</th>
                                 <th>{{ __('Product Name') }}</th>
+                                <th>{{ __('Varian Produk') }}</th>
+                                <th>{{ __('Warna Produk') }}</th>
                                 <th>{{ __('Stock In') }}</th>
                                 <th>{{ __('Stock Out') }}</th>
                                 <th>{{ __('Retur') }}</th>
+                                <th>{{ __('Reject') }}</th>
                                 <th>{{ __('Sisa') }}</th>
                             </tr>
                         </thead>
@@ -62,31 +65,42 @@
                                         $in     = "";
                                         $out    = $d->product_amount;
                                         $retur  = "";
+                                        $reject = "";
                                     } else if($d->type == 1){
                                         $in     = $d->product_amount;
                                         $out    = "";
                                         $retur  = "";
-                                    } else {
+                                        $reject = "";
+                                    } else if($d->type == 2){
                                         $in     = "";
                                         $out    = "";
                                         $retur  = $d->product_amount;
+                                        $reject = "";
+                                    } else {
+                                        $in     = "";
+                                        $out    = "";
+                                        $retur  = "";
+                                        $reject = $d->product_amount;
                                     }
 
                                 @endphp
                                 <tr>
-                                    <td class="text-center">{{ date('d/m/Y', strtotime($d->datetime)) }}</td>
+                                    <td class="text-left">{{ date('d/m/Y H:i:s', strtotime($d->datetime)) }}</td>
                                     <td class="text-center">{{ $d->name }}</td>
                                     <td class="text-center">{{ $d->product_code }}</td>
                                     <td>{{ $d->product_name }}</td>
+                                    <td>{{ $d->variant }}</td>
+                                    <td>{{ $d->color }}</td>
                                     <td class="text-center">{{ $in }}</td>
                                     <td class="text-center">{{ $out }}</td>
                                     <td class="text-center">{{ $retur }}</td>
+                                    <td class="text-center">{{ $reject }}</td>
                                     <td class="text-center">{{ $d->ending_amount }}</td>
                                 </tr>
                             @endforeach
                         @else
                             <tr class="text-center">
-                                <td colspan="8">{{ __('No data.') }}</td>
+                                <td colspan="11">{{ __('No data.') }}</td>
                             </tr>
                         @endif
                         </tbody>
