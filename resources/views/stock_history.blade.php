@@ -109,7 +109,7 @@
             </div>
         </div>
         <div>
-        {{ $history->links("pagination::bootstrap-4") }}
+        {{ $history->appends(request()->input())->links("pagination::bootstrap-4") }}
         </div>
     </div>
 </section>

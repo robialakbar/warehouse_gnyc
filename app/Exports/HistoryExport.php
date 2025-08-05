@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class HistoryExport implements FromCollection, WithHeadings, ShouldAutoSize, WithStyles
+class HistoryExport implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize
 {
     use Exportable;
     private $data;
@@ -32,21 +32,30 @@ class HistoryExport implements FromCollection, WithHeadings, ShouldAutoSize, Wit
     {
         return [
             'DATE',
-            'PRODUCT',
-            'NO. NOTA',
-            'CUSTOMER',
+            'USER',
+            'PRODUCT CODE',
+            'PRODUCT NAME',
+            'VARIAN',
+            'WARNA',
             'STOCK IN',
             'STOCK OUT',
             'RETUR',
+            'REJECT',
             'SISA',
-            'SATUAN (RP)',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
-        $sheet->getStyle('A1:I1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:K1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:K1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('D')->getAlignment()->setWrapText(true);
+
+        $pageSetup = $sheet->getPageSetup();
+        $pageSetup->setFitToWidth(1);
+        $pageSetup->setFitToHeight(0);
+        $pageSetup->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $pageSetup->setHorizontalCentered(true);
     }
 }

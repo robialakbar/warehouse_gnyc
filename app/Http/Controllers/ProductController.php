@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Excel;
+use PDF;
 use App\Imports\ProductsImport;
 
 class ProductController extends Controller
@@ -478,22 +479,35 @@ class ProductController extends Controller
                     $in     = "";
                     $out    = $t->product_amount;
                     $retur  = "";
+                    $reject = "";
                 } else if($t->type == "1"){
                     $in     = $t->product_amount;
                     $out    = "";
                     $retur  = "";
-                } else {
+                    $reject = "";
+                } else if($t->type == "2"){
                     $in     = "";
                     $out    = "";
                     $retur  = $t->product_amount;
+                    $reject = "";
+                } else {
+                    $in     = "";
+                    $out    = "";
+                    $retur  = "";
+                    $reject = $t->product_amount;
                 }
 
                 $historyExport[] = [
-                    "DATE"              => date('d/m/Y', strtotime($t->datetime)),
-                    "PRODUCT"           => $t->product_name,
+                    "DATE"              => date('d/m/Y H:i:s', strtotime($t->datetime)),
+                    "USER"              => $t->name,
+                    "PRODUCT CODE"      => $t->product_code,
+                    "PRODUCT NAME"      => $t->product_name,
+                    "VARIAN"            => $t->variant,
+                    "WARNA"             => $t->color,
                     "STOCK IN"          => $in,
                     "STOCK OUT"         => $out,
                     "RETUR"             => $retur,
+                    "REJECT"            => $reject,
                     "SISA"              => $t->ending_amount,
                 ];
             }
@@ -501,7 +515,15 @@ class ProductController extends Controller
             if($dl == "xls"){
                 return (new HistoryExport($historyExport))->download($fn.'.xls', \Maatwebsite\Excel\Excel::XLS);
             } else if($dl == "pdf"){
-                return (new HistoryExport($historyExport))->download($fn.'.pdf');
+                if(!empty($historyExport)){
+                    $heading = array_keys($historyExport[0]);
+                    $pdf            = PDF::loadView('download_history', compact("heading","historyExport"));
+                    $fn             = $fn.".pdf";
+
+                    return $pdf->setPaper('A4', 'landscape')->stream($fn);
+                } else {
+                    $req->session()->flash('error', "Laporan belum tersedia!");
+                }
             }
         }
 
